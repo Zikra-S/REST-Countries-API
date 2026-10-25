@@ -38,16 +38,14 @@ function Countries() {
   }
 
   const filtered = data.filter((country) => {
-    const matchesName = country.name
-      .toLowerCase()
-      .includes(search.trim().toLowerCase());
+    const matchesName = country.name.toLowerCase().includes(search.trim().toLowerCase());
     const matchesRegion = region === "" || country.region === region;
 
     return matchesName && matchesRegion;
   });
 
   return (
-    <main className="mx-auto max-w-[1280px] px-4 py-6 md:px-20 md:py-12">
+    <main className="mx-auto max-w-[1440px] px-4 py-6 md:px-20 md:py-12">
       <div className="flex flex-col items-start gap-10 md:flex-row md:items-center md:justify-between">
         <SearchBar value={search} onChange={setSearch} />
         <RegionFilter value={region} onChange={setRegion} />
@@ -56,13 +54,9 @@ function Countries() {
       {filtered.length === 0 ? (
         <p className="mt-6">No countries found</p>
       ) : (
-        <div className="mt-6 grid gap-6 md:grid-cols-4">
+        <div className="mt-8 grid grid-cols-[repeat(auto-fill,264px)] justify-center gap-x-6 gap-y-10 md:mt-12 md:justify-between md:gap-y-[75px]">
           {filtered.map((country) => (
-            <CountryCard
-              key={country.alpha3Code}
-              country={country}
-              onSelect={setSelected}
-            />
+            <CountryCard key={country.alpha3Code} country={country} onSelect={setSelected} />
           ))}
         </div>
       )}
