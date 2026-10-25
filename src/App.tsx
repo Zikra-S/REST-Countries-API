@@ -5,8 +5,9 @@ import CountryCard from "./components/countryCard";
 import CountryDetail from "./components/countryDetail";
 import SearchBar from "./components/searchBar";
 import RegionFilter from "./components/regionFilter";
+import Header from "./components/header";
 
-function App() {
+function Countries() {
   const [search, setSearch] = useState("");
   const [region, setRegion] = useState("");
   const [selected, setSelected] = useState<string | null>(null);
@@ -22,11 +23,20 @@ function App() {
   const selectedCountry = data.find((item) => item.alpha3Code === selected);
 
   if (selectedCountry) {
-    return <CountryDetail country={selectedCountry} countries={data} onBack={() => setSelected(null)} onSelect={setSelected} />;
+    return (
+      <CountryDetail
+        country={selectedCountry}
+        countries={data}
+        onBack={() => setSelected(null)}
+        onSelect={setSelected}
+      />
+    );
   }
 
   const filtered = data.filter((country) => {
-    const matchesName = country.name.toLowerCase().includes(search.trim().toLowerCase());
+    const matchesName = country.name
+      .toLowerCase()
+      .includes(search.trim().toLowerCase());
     const matchesRegion = region === "" || country.region === region;
 
     return matchesName && matchesRegion;
@@ -44,11 +54,24 @@ function App() {
       ) : (
         <div className="mt-6 grid gap-6 md:grid-cols-4">
           {filtered.map((country) => (
-            <CountryCard key={country.alpha3Code} country={country} onSelect={setSelected} />
+            <CountryCard
+              key={country.alpha3Code}
+              country={country}
+              onSelect={setSelected}
+            />
           ))}
         </div>
       )}
     </main>
+  );
+}
+
+function App() {
+  return (
+    <div className="min-h-screen bg-white text-black dark:bg-slate-900 dark:text-white">
+      <Header />
+      <Countries />
+    </div>
   );
 }
 

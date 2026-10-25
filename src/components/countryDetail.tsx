@@ -8,7 +8,9 @@ type CountryDetailProps = {
 };
 
 function CountryDetail({ country, countries, onBack, onSelect }: CountryDetailProps) {
-  const borders = countries.filter((item) => country.borders?.includes(item.alpha3Code));
+  const borders = countries.filter((item) =>
+    country.borders?.includes(item.alpha3Code)
+  );
 
   const currencies = country.currencies?.map((item) => item.name).join(", ");
   const languages = country.languages.map((item) => item.name).join(", ");
@@ -64,7 +66,11 @@ function CountryDetail({ country, countries, onBack, onSelect }: CountryDetailPr
               <span>None</span>
             ) : (
               borders.map((item) => (
-                <button key={item.alpha3Code} onClick={() => onSelect(item.alpha3Code)} className="border px-3 py-1">
+                <button
+                  key={item.alpha3Code}
+                  onClick={() => onSelect(item.alpha3Code)}
+                  className="border px-3 py-1"
+                >
                   {item.name}
                 </button>
               ))
