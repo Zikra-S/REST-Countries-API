@@ -3,9 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchCountries } from "./api/countries";
 import CountryCard from "./components/countryCard";
 import SearchBar from "./components/searchBar";
+import RegionFilter from "./components/regionFilter";
 
 function App() {
   const [search, setSearch] = useState("");
+  const [region, setRegion] = useState("");
 
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["countries"],
@@ -15,13 +17,19 @@ function App() {
   if (isPending) return <p className="p-6">Loading...</p>;
   if (isError) return <p className="p-6">Something went wrong: {error.message}</p>;
 
-  const filtered = data.filter((country) =>
-    country.name.toLowerCase().includes(search.trim().toLowerCase())
-  );
+  const filtered = data.filter((country) => {
+    const matchesName = country.name.toLowerCase().includes(search.trim().toLowerCase());
+    const matchesRegion = region === "" || country.region === region;
+
+    return matchesName && matchesRegion;
+  });
 
   return (
     <main className="p-6">
-      <SearchBar value={search} onChange={setSearch} />
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <SearchBar value={search} onChange={setSearch} />
+        <RegionFilter value={region} onChange={setRegion} />
+      </div>
 
       {filtered.length === 0 ? (
         <p className="mt-6">No countries found</p>
