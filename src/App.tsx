@@ -1,16 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-
-type Country = {
-  name: string;
-  alpha3Code: string;
-  population: number;
-};
-
-async function fetchCountries(): Promise<Country[]> {
-  const response = await fetch("/data.json");
-  if (!response.ok) throw new Error("Failed to fetch countries");
-  return response.json();
-}
+import { fetchCountries } from "./api/countries";
+import CountryCard from "./components/countryCard";
 
 function App() {
   const { data, isPending, isError, error } = useQuery({
@@ -22,16 +12,11 @@ function App() {
   if (isError) return <p className="p-6">Something went wrong: {error.message}</p>;
 
   return (
-    <div className="p-6">
-      <p>Got {data.length} countries!</p>
-      <ul>
-        {data.slice(0, 5).map((country) => (
-          <li key={country.alpha3Code}>
-            {country.name} - {country.population.toLocaleString()}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <main className="grid gap-6 p-6 md:grid-cols-4">
+      {data.map((country) => (
+        <CountryCard key={country.alpha3Code} country={country} />
+      ))}
+    </main>
   );
 }
 
