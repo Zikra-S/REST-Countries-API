@@ -4,22 +4,27 @@ type CountryDetailProps = {
   country: Country;
   countries: Country[];
   onBack: () => void;
+  onNext: () => void;
   onSelect: (code: string) => void;
 };
 
-function CountryDetail({ country, countries, onBack, onSelect }: CountryDetailProps) {
-  const borders = countries.filter((item) =>
-    country.borders?.includes(item.alpha3Code)
-  );
+function CountryDetail({ country, countries, onBack, onNext, onSelect }: CountryDetailProps) {
+  const borders = countries.filter((item) => country.borders?.includes(item.alpha3Code));
 
   const currencies = country.currencies?.map((item) => item.name).join(", ");
   const languages = country.languages.map((item) => item.name).join(", ");
 
   return (
     <main className="p-6">
-      <button onClick={onBack} className="border px-4 py-2">
-        Back
-      </button>
+      <div className="flex items-center justify-between">
+        <button onClick={onBack} className="border px-4 py-2">
+          Back
+        </button>
+
+        <button onClick={onNext} aria-label="Next country" className="border px-4 py-2">
+          Next →
+        </button>
+      </div>
 
       <div className="mt-10 grid gap-10 md:grid-cols-2">
         <img src={country.flags.svg} alt={`Flag of ${country.name}`} />
@@ -66,11 +71,7 @@ function CountryDetail({ country, countries, onBack, onSelect }: CountryDetailPr
               <span>None</span>
             ) : (
               borders.map((item) => (
-                <button
-                  key={item.alpha3Code}
-                  onClick={() => onSelect(item.alpha3Code)}
-                  className="border px-3 py-1"
-                >
+                <button key={item.alpha3Code} onClick={() => onSelect(item.alpha3Code)} className="border px-3 py-1">
                   {item.name}
                 </button>
               ))

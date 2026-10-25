@@ -20,23 +20,25 @@ function Countries() {
   if (isPending) return <p className="p-6">Loading...</p>;
   if (isError) return <p className="p-6">Something went wrong: {error.message}</p>;
 
-  const selectedCountry = data.find((item) => item.alpha3Code === selected);
+  const selectedIndex = data.findIndex((item) => item.alpha3Code === selected);
+  const selectedCountry = data[selectedIndex];
 
   if (selectedCountry) {
+    const nextCountry = data[(selectedIndex + 1) % data.length];
+
     return (
       <CountryDetail
         country={selectedCountry}
         countries={data}
         onBack={() => setSelected(null)}
+        onNext={() => setSelected(nextCountry.alpha3Code)}
         onSelect={setSelected}
       />
     );
   }
 
   const filtered = data.filter((country) => {
-    const matchesName = country.name
-      .toLowerCase()
-      .includes(search.trim().toLowerCase());
+    const matchesName = country.name.toLowerCase().includes(search.trim().toLowerCase());
     const matchesRegion = region === "" || country.region === region;
 
     return matchesName && matchesRegion;
@@ -54,11 +56,7 @@ function Countries() {
       ) : (
         <div className="mt-6 grid gap-6 md:grid-cols-4">
           {filtered.map((country) => (
-            <CountryCard
-              key={country.alpha3Code}
-              country={country}
-              onSelect={setSelected}
-            />
+            <CountryCard key={country.alpha3Code} country={country} onSelect={setSelected} />
           ))}
         </div>
       )}
@@ -68,7 +66,7 @@ function Countries() {
 
 function App() {
   return (
-    <div className="min-h-screen bg-white text-black dark:bg-slate-900 dark:text-white">
+    <div className="min-h-screen bg-lm-bg text-lm-text dark:bg-dm-bg dark:text-white">
       <Header />
       <Countries />
     </div>
