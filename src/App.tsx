@@ -19,8 +19,10 @@ function App() {
   if (isPending) return <p className="p-6">Loading...</p>;
   if (isError) return <p className="p-6">Something went wrong: {error.message}</p>;
 
-  if (selected) {
-    return <CountryDetail code={selected} onBack={() => setSelected(null)} />;
+  const selectedCountry = data.find((item) => item.alpha3Code === selected);
+
+  if (selectedCountry) {
+    return <CountryDetail country={selectedCountry} countries={data} onBack={() => setSelected(null)} onSelect={setSelected} />;
   }
 
   const filtered = data.filter((country) => {
